@@ -1,0 +1,28 @@
+
+<div class="mx-auto m-5 w-25 h-50 pt-5 pb-5">
+  <form action="auth/authentication" method="post" name="form1" class="m-5">
+
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email</label>
+      <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" value="">
+    </div>
+
+    <div class="form-group">
+      <label for="exampleInputEmail1">Password</label>
+      <input type="password" name="password" class="form-control" id="password" aria-describedby="emailHelp" placeholder="*********" value="">
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Login">
+  </form>
+  <div class="text-center">
+    <% if (messages.error) { %>
+      <p style="color:red"><%- messages.error %></p>
+      <% } %>
+
+      <% if (messages.success) { %>
+          <p style="color:green"><%- messages.success %></p>
+      <% } %>
+  </div>
+
+</div>
+
