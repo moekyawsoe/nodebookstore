@@ -1,0 +1,49 @@
+
+	<% if (messages.error) { %>
+    <div class="alert alert-danger" role="alert"><%- messages.error %></div>
+    <% } %>
+
+      <div class="card">
+        <div class="card-header">
+        Edit Book
+      </div>
+          <div class="card-body">
+              <form action="/submitter/update/<%= id %>" method="post" enctype="multipart/form-data">
+                  <div class="form-group">
+                      <label>Name:</label>
+                      <input type="text" class="form-control" name="name" value="<%= name %>" autocomplete="off">
+                  </div>
+                  <div class="form-group">
+                      <label>Email :</label>
+                      <input type="text" class="form-control" name="email" value="<%= email %>" autocomplete="off">
+                  </div>
+                  <div class="form-group">
+                    <label>Password :</label>
+                    <input type="text" class="form-control" name="pass" value="<%= pass %>" autocomplete="off">
+                </div>
+                  <div class="form-group">
+                    <label>User Photo :</label>
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input customFileImg" id="customFileImg" name="customFileImg">
+                      <label class="custom-file-label" for="customFileImg">Choose file</label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                      <input type="submit" class="btn btn-info" value="Update"/>
+                  </div>
+              </form>
+          </div>
+      </div>
+
+      <script>
+        // Add the following code if you want the name of the file appear on select
+        $(".customFileImg").on("change", function() {
+          var fileName = $(this).val().split("\\").pop();
+          $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+        $(".customFilePdf").on("change", function() {
+          var fileName = $(this).val().split("\\").pop();
+          $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+        </script>

@@ -7,9 +7,9 @@ var connection = require('../lib/db');
 //display login page
 router.get('/',function(req, res,next){
   //render to views/user/add.ejs
-  res.render('index', {
+  res.render('./pages/index', {
     title:'Login',
-    link: "./templates/auth/login",
+    link: "frontend/auth/login",
     email: '',
     password:''
   })
@@ -18,9 +18,9 @@ router.get('/',function(req, res,next){
 //display login page
 router.get('/login',function(req,res,next){
    //render to views/user/add.ejs
-   res.render('index', {
+   res.render('./pages/index', {
     title:'Login',
-    link: "./templates/auth/login",
+    link: "frontend/auth/login",
     email: '',
     password:''
   })

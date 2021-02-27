@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
-  <a class="navbar-brand text-success" href="#">Book Store</a>
+  <a class="navbar-brand text-success" href="/">Book Store</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -13,9 +13,22 @@
       </li>
 
     </ul>
-      <form class="d-flex">
-        <input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
+      <form class="d-flex" action="/search" method="get">
+
+        <input class="form-control typeahead mr-2" id="search" autocomplete="off" name="typeahead" type="search" placeholder="Search Book or Author" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
 
 </nav>
+
+<script>
+  (function(){
+    console.log(" I am working ..");
+    var tempdata = document.getElementById("hidvalue").value;
+    // if(tData){
+    //   document.getElementById("search").value = tData;
+    // }else{
+    //   document.getElementById("search").value = "";
+    // }
+  })();
+</script>

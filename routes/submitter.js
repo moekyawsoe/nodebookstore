@@ -13,18 +13,18 @@ function isAuthenticated(req, res, next) {
 
 //display books page
 router.get('/',isAuthenticated, function(req, res, next){
-  dbConn.query('SELECT * FROM books ORDER BY id desc',function(err,rows){
+  dbConn.query('SELECT * FROM users ORDER BY id desc',function(err,rows){
     if(err){
       req.flash('error',err);
 
       //render to views/books/index.ejs
-      res.render('books',{data:''});
+      res.render('./pages/backend/index',{data:''});
     }else{
       //render to views/books/index.ejs
       // res.render('books',{data:rows});
       res.render('./pages/backend/index', {
-        title:'Login',
-        link: "books/home",
+        title:'Users',
+        link: "submitter/home",
         data:rows
       })
     }
@@ -35,8 +35,8 @@ router.get('/',isAuthenticated, function(req, res, next){
 router.get('/add',isAuthenticated,function(req,res,next){
   //render to add.ejs
   res.render('./pages/backend/index', {
-    title:'Login',
-    link: "books/add",
+    title:'User Add',
+    link: "submitter/add",
     name:'',
     author:''
   })
@@ -46,21 +46,23 @@ router.get('/add',isAuthenticated,function(req,res,next){
 router.post('/add',isAuthenticated, function(req, res, next) {
 
   let name = req.body.name;
-  let author = req.body.author;
+  let email = req.body.email;
+  let pass = req.body.pass;
 
   let errors = false;
 
-  if(name.length === 0 || author.length === 0) {
+  if(name.length === 0 || email.length === 0) {
       errors = true;
 
       // set flash message
       req.flash('error', "Please enter name and author");
       // render to add.ejs with flash message
       res.render('./pages/backend/index', {
-        title:'Login',
-        link: "books/add",
+        title:'Add a user',
+        link: "submitter/add",
         name:name,
-        author:author
+        email:email,
+        pass:pass
       })
   }
 
@@ -69,30 +71,27 @@ router.post('/add',isAuthenticated, function(req, res, next) {
 
       var form_data = {
           name: name,
-          author: author
+          email: email,
+          password:pass
       }
 
       // insert query
-      dbConn.query('INSERT INTO books SET ?', form_data, function(err, result) {
+      dbConn.query('INSERT INTO users SET ?', form_data, function(err, result) {
           //if(err) throw err
           if (err) {
               req.flash('error', err)
 
-              // render to add.ejs
-              res.render('books/add', {
-                  name: form_data.name,
-                  author: form_data.author
-              })
               res.render('./pages/backend/index', {
                 title:'Login',
-                link: "books/add",
-                name:form_data.name,
-                author:form_data.author
+                link: "submitter/add",
+                name: form_data.name,
+                email: form_data.email,
+                pass :form_data.password
               })
           } else {
 
               req.flash('success', 'Book successfully added');
-              res.redirect('/books');
+              res.redirect('/submitter');
           }
       })
   }
@@ -103,25 +102,24 @@ router.get('/edit/(:id)',isAuthenticated, function(req, res, next) {
 
   let id = req.params.id;
 
-  dbConn.query('SELECT * FROM books WHERE id = ' + id, function(err, rows, fields) {
+  dbConn.query('SELECT * FROM users WHERE id = ' + id, function(err, rows, fields) {
       if(err) throw err
 
       // if user not found
       if (rows.length <= 0) {
-          req.flash('error', 'Book not found with id = ' + id)
-          res.redirect('/books')
+          req.flash('error', 'User not found with id = ' + id)
+          res.redirect('/submitter')
       }
       // if book found
       else {
 
           res.render('./pages/backend/index', {
-            link: "books/edit",
+            link: "submitter/edit",
             title: 'Edit Book',
             id: rows[0].id,
             name: rows[0].name,
-            author: rows[0].author,
-            img: rows[0].img,
-            file: rows[0].file
+            email: rows[0].email,
+            pass:rows[0].password
           })
       }
   })
@@ -132,22 +130,24 @@ router.post('/update/:id',isAuthenticated, function(req, res, next) {
 
   let id = req.params.id;
   let name = req.body.name;
-  let author = req.body.author;
+  let email = req.body.email;
+  let pass = req.body.pass;
 
   let errors = false;
 
-  if(name.length === 0 || author.length === 0) {
+  if(name.length === 0 || email.length === 0) {
       errors = true;
 
       // set flash message
-      req.flash('error', "Please enter name and author");
+      req.flash('error', "Please enter email and password");
 
       res.render('./pages/backend/index', {
-        link: "books/edit",
-        title: 'Edit Book',
+        link: "submitter/edit",
+        title: 'Edit User',
         id: req.params.id,
         name: name,
-        author: author
+        email: email,
+        pass:pass
       })
 
   }
@@ -157,24 +157,26 @@ router.post('/update/:id',isAuthenticated, function(req, res, next) {
 
       var form_data = {
           name: name,
-          author: author
+          password: pass,
+          email: email
       }
       // if(img.mimetype == "image/jpeg" || img.mimetype == "image/png" || img.mimetype == "image/gif"){
           // update query
-          dbConn.query('UPDATE books SET ? WHERE id = ' + id, form_data, function(err, result) {
+          dbConn.query('UPDATE users SET ? WHERE id = ' + id, form_data, function(err, result) {
             //if(err) throw err
             if (err) {
                 // set flash message
                 res.render('./pages/backend/index', {
-                  link: "books/edit",
+                  link: "submitter/edit",
                   title: 'Edit Book',
                   id: req.params.id,
                   name: form_data.name,
-                  author: form_data.author,
+                  email: form_data.email,
+                  pass: form_data_pass
                 })
             } else {
-                req.flash('success', 'Book successfully updated');
-                res.redirect('/books');
+                req.flash('success', 'User successfully updated');
+                res.redirect('/submitter');
             }
           })
       // }
@@ -187,18 +189,18 @@ router.get('/delete/(:id)',isAuthenticated, function(req, res, next) {
 
   let id = req.params.id;
 
-  dbConn.query('DELETE FROM books WHERE id = ' + id, function(err, result) {
+  dbConn.query('DELETE FROM users WHERE id = ' + id, function(err, result) {
       //if(err) throw err
       if (err) {
           // set flash message
           req.flash('error', err)
           // redirect to books page
-          res.redirect('/books')
+          res.redirect('/submitter')
       } else {
           // set flash message
           req.flash('success', 'Book successfully deleted! ID = ' + id)
           // redirect to books page
-          res.redirect('/books')
+          res.redirect('/submitter')
       }
   })
 })

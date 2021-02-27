@@ -14,6 +14,7 @@ var connection  = require('./lib/db');
 var booksRouter = require('./routes/books');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var submitterRouter = require('./routes/submitter');
 
 var app = express();
 
@@ -41,6 +42,7 @@ app.use(fileUpload());
 app.use('/', indexRouter);
 app.use('/auth', usersRouter);
 app.use('/books', booksRouter);
+app.use('/submitter',submitterRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -55,7 +57,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('./pages/error');
 });
 
 // app.listen(3000,()=>{
