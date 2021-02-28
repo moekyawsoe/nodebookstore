@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var dbConn = require('../lib/db');
-var multer = require('multer');
 
 function isAuthenticated(req, res, next) {
 
@@ -18,13 +17,13 @@ router.get('/',isAuthenticated, function(req, res, next){
       req.flash('error',err);
 
       //render to views/books/index.ejs
-      res.render('./pages/backend/index',{data:''});
+      res.render('./backend/index',{data:''});
     }else{
       //render to views/books/index.ejs
       // res.render('books',{data:rows});
-      res.render('./pages/backend/index', {
+      res.render('./backend/index', {
         title:'Users',
-        link: "submitter/home",
+        link: "pages/submitter/home",
         data:rows
       })
     }
@@ -34,9 +33,9 @@ router.get('/',isAuthenticated, function(req, res, next){
 //display add home page
 router.get('/add',isAuthenticated,function(req,res,next){
   //render to add.ejs
-  res.render('./pages/backend/index', {
+  res.render('./backend/index', {
     title:'User Add',
-    link: "submitter/add",
+    link: "pages/submitter/add",
     name:'',
     author:''
   })
@@ -49,17 +48,18 @@ router.post('/add',isAuthenticated, function(req, res, next) {
   let email = req.body.email;
   let pass = req.body.pass;
 
+
   let errors = false;
 
   if(name.length === 0 || email.length === 0) {
       errors = true;
 
       // set flash message
-      req.flash('error', "Please enter name and author");
+      req.flash('error', "Please enter name and email");
       // render to add.ejs with flash message
-      res.render('./pages/backend/index', {
+      res.render('./backend/index', {
         title:'Add a user',
-        link: "submitter/add",
+        link: "pages/submitter/add",
         name:name,
         email:email,
         pass:pass
@@ -68,12 +68,33 @@ router.post('/add',isAuthenticated, function(req, res, next) {
 
   // if no error
   if(!errors) {
+  //   if (!req.files)
+	// 			return res.status(400).send('No files were uploaded.');
+
+  //   var file = req.files.customFileImg;
+  //   var img_name=file.name;
+
+  //   if(file.mimetype == "image/jpeg" ||file.mimetype == "image/png"||file.mimetype == "image/gif" ){
+
+  //     file.mv('public/images/upload_images/'+file.name, function(err) {
+
+  //       if (err)
+
+  //         return res.status(500).send(err);
+
+
+  //    });
+  // } else {
+  //   req.flash('success', "This format is not allowed , please upload file with '.png','.gif','.jpg'");
+  // }
 
       var form_data = {
           name: name,
           email: email,
           password:pass
+          // file:img_name
       }
+
 
       // insert query
       dbConn.query('INSERT INTO users SET ?', form_data, function(err, result) {
@@ -81,9 +102,9 @@ router.post('/add',isAuthenticated, function(req, res, next) {
           if (err) {
               req.flash('error', err)
 
-              res.render('./pages/backend/index', {
-                title:'Login',
-                link: "submitter/add",
+              res.render('./backend/index', {
+                title:'User Add',
+                link: "pages/submitter/add",
                 name: form_data.name,
                 email: form_data.email,
                 pass :form_data.password
@@ -113,9 +134,9 @@ router.get('/edit/(:id)',isAuthenticated, function(req, res, next) {
       // if book found
       else {
 
-          res.render('./pages/backend/index', {
-            link: "submitter/edit",
-            title: 'Edit Book',
+          res.render('./backend/index', {
+            link: "pages/submitter/edit",
+            title: 'Edit User',
             id: rows[0].id,
             name: rows[0].name,
             email: rows[0].email,
@@ -141,8 +162,8 @@ router.post('/update/:id',isAuthenticated, function(req, res, next) {
       // set flash message
       req.flash('error', "Please enter email and password");
 
-      res.render('./pages/backend/index', {
-        link: "submitter/edit",
+      res.render('./backend/index', {
+        link: "pages/submitter/edit",
         title: 'Edit User',
         id: req.params.id,
         name: name,
@@ -166,9 +187,9 @@ router.post('/update/:id',isAuthenticated, function(req, res, next) {
             //if(err) throw err
             if (err) {
                 // set flash message
-                res.render('./pages/backend/index', {
-                  link: "submitter/edit",
-                  title: 'Edit Book',
+                res.render('./backend/index', {
+                  link: "pages/submitter/edit",
+                  title: 'Edit User',
                   id: req.params.id,
                   name: form_data.name,
                   email: form_data.email,

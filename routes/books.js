@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var dbConn = require('../lib/db');
-var multer = require('multer');
 
 function isAuthenticated(req, res, next) {
 
@@ -16,15 +15,13 @@ router.get('/',isAuthenticated, function(req, res, next){
   dbConn.query('SELECT * FROM books ORDER BY id desc',function(err,rows){
     if(err){
       req.flash('error',err);
-
-      //render to views/books/index.ejs
-      res.render('books',{data:''});
+      res.render('./backend/index',{data:''});
     }else{
       //render to views/books/index.ejs
       // res.render('books',{data:rows});
-      res.render('./pages/backend/index', {
-        title:'Login',
-        link: "books/home",
+      res.render('./backend/index', {
+        title:'Books Dashboard',
+        link: "pages/books/home",
         data:rows
       })
     }
@@ -34,9 +31,9 @@ router.get('/',isAuthenticated, function(req, res, next){
 //display add home page
 router.get('/add',isAuthenticated,function(req,res,next){
   //render to add.ejs
-  res.render('./pages/backend/index', {
-    title:'Login',
-    link: "books/add",
+  res.render('./backend/index', {
+    title:'Book Add',
+    link: "pages/books/add",
     name:'',
     author:''
   })
@@ -56,9 +53,9 @@ router.post('/add',isAuthenticated, function(req, res, next) {
       // set flash message
       req.flash('error', "Please enter name and author");
       // render to add.ejs with flash message
-      res.render('./pages/backend/index', {
-        title:'Login',
-        link: "books/add",
+      res.render('./backend/index', {
+        title:'Book Add',
+        link: "pages/books/add",
         name:name,
         author:author
       })
@@ -79,13 +76,13 @@ router.post('/add',isAuthenticated, function(req, res, next) {
               req.flash('error', err)
 
               // render to add.ejs
-              res.render('books/add', {
+              res.render('pages/books/add', {
                   name: form_data.name,
                   author: form_data.author
               })
-              res.render('./pages/backend/index', {
-                title:'Login',
-                link: "books/add",
+              res.render('./backend/index', {
+                title:'Book Add Success',
+                link: "pages/books/add",
                 name:form_data.name,
                 author:form_data.author
               })
@@ -114,8 +111,8 @@ router.get('/edit/(:id)',isAuthenticated, function(req, res, next) {
       // if book found
       else {
 
-          res.render('./pages/backend/index', {
-            link: "books/edit",
+          res.render('./backend/index', {
+            link: "pages/books/edit",
             title: 'Edit Book',
             id: rows[0].id,
             name: rows[0].name,
@@ -142,8 +139,8 @@ router.post('/update/:id',isAuthenticated, function(req, res, next) {
       // set flash message
       req.flash('error', "Please enter name and author");
 
-      res.render('./pages/backend/index', {
-        link: "books/edit",
+      res.render('./backend/index', {
+        link: "pages/books/edit",
         title: 'Edit Book',
         id: req.params.id,
         name: name,
@@ -165,8 +162,8 @@ router.post('/update/:id',isAuthenticated, function(req, res, next) {
             //if(err) throw err
             if (err) {
                 // set flash message
-                res.render('./pages/backend/index', {
-                  link: "books/edit",
+                res.render('./backend/index', {
+                  link: "pages/books/edit",
                   title: 'Edit Book',
                   id: req.params.id,
                   name: form_data.name,

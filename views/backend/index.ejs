@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,21 +9,24 @@
   <link rel="stylesheet" href="/stylesheets/bootstrap/css/bootstrap.min.css">
   <script src="/stylesheets/bootstrap/js/jquery.min.js"></script>
 </head>
+
 <body>
-
-        <%- include('../components/nav') %>
-
-        <div class="csmain" id="container">
+  <%- include('components/nav') %>
+  <div>
+    <div class="container-fluid vh-100">
+      <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse vh-100">
+          <%- include('components/sidebar') %>
+        </nav>
+        <main class="col-md-9 ms-sm-auto col-lg-10 mt-4">
           <% if(link) %>
-          <%- include(link) %>
-        </div>
-
-        <div class="csfoot">
-          <%- include('../components/footer') %>
-        </div>
-
+            <%- include(link) %>
+        </main>
+      </div>
+    </div>
+  </div>
 
   <script src="/stylesheets/bootstrap/js/bootstrap.min.js"></script>
-  <script src="/javascripts/typeahead.min.js"></script>
+
 </body>
 </html>

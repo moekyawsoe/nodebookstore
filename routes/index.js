@@ -8,15 +8,13 @@ router.get('/',function(req, res, next) {
 dbConn.query('SELECT * FROM books ORDER BY id ',function(err,rows){
     if(err){
       req.flash('error',err);
-
-      //render to views/books/index.ejs
-      res.render('./pages/index',{data:''});
+      res.render('./frontend/index',{data:''});
     }else{
       //render to views/books/index.ejs
       // res.render('books',{data:rows});
-      res.render('./pages/index', {
+      res.render('./frontend/index', {
         title:'Book Store',
-        link: "frontend/index",
+        link: "pages/home/home",
         data:rows,
         stemp:''
       })
@@ -34,13 +32,13 @@ router.get('/search',function(req, res, next) {
         req.flash('error',err);
 
         //render to views/books/index.ejs
-        res.render('./pages/index',{data:''});
+        res.render('./frontend/index',{data:''});
       }else{
         //render to views/books/index.ejs
         // res.render('books',{data:rows});
-        res.render('./pages/index', {
+        res.render('./frontend/index', {
           title:'Book Store',
-          link: "frontend/index",
+          link: "pages/home/home",
           data:rows,
           stemp:searchData
         })
